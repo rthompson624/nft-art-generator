@@ -74,6 +74,8 @@ const takenNames = {};
 const takenFaces = {};
 let idx = 999;
 
+const records = [];
+
 function randInt(max) {
   return Math.floor(Math.random() * (max + 1));
 }
@@ -87,9 +89,9 @@ function getRandomName() {
   const adjectives = 'fired trashy tubular nasty jacked swol buff ferocious firey flamin agnostic artificial bloody crazy cringey crusty dirty eccentric glutinous harry juicy simple stylish awesome creepy corny freaky shady sketchy lame sloppy hot intrepid juxtaposed killer ludicrous mangy pastey ragin rusty rockin sinful shameful stupid sterile ugly vascular wild young old zealous flamboyant super sly shifty trippy fried injured depressed anxious clinical'.split(' ');
   const names = 'aaron bart chad dale earl fred grady harry ivan jeff joe kyle lester steve tanner lucifer todd mitch hunter mike arnold norbert olaf plop quinten randy saul balzac tevin jack ulysses vince will xavier yusuf zack roger raheem rex dustin seth bronson dennis'.split(' ');
   
-  const randAdj = randElement(adjectives);
-  const randName = randElement(names);
-  const name =  `${randAdj}-${randName}`;
+  const randAdj = titleCase(randElement(adjectives));
+  const randName = titleCase(randElement(names));
+  const name =  `${randAdj} ${randName}`;
 
 
   if (takenNames[name] || !name) {
@@ -98,6 +100,12 @@ function getRandomName() {
     takenNames[name] = name;
     return name;
   }
+}
+
+function titleCase(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return (word.charAt(0).toUpperCase() + word.slice(1));
+  }).join(' ');
 }
 
 function getLayer(name, skip=0.0) {
@@ -147,7 +155,7 @@ function createImage(idx) {
 
     const meta = {
       name,
-      description: `A drawing of ${name.split('-').join(' ')}`,
+      description: `A drawing of ${name}`,
       image: `${idx}.png`,
       attributes: [
         { 
@@ -176,6 +184,7 @@ function createImage(idx) {
         }
       ]
     }
+    records.push(meta);
     writeFileSync(`./out/${idx}.json`, JSON.stringify(meta))
     writeFileSync(`./out/${idx}.svg`, final)
     svgToPng(idx)
@@ -196,3 +205,5 @@ do {
   createImage(idx);
   idx--;
 } while (idx >= 0);
+
+writeFileSync(`./out/db.json`, JSON.stringify(records));
