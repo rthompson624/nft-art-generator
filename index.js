@@ -154,6 +154,7 @@ function createImage(idx) {
       .replace('<!-- beard -->', getLayer(`beard${beard}`, 0.5))
 
     const meta = {
+      id: idx,
       name,
       description: `A drawing of ${name}`,
       image: `${idx}.png`,
