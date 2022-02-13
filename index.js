@@ -72,7 +72,7 @@ const beard_MAP = [
 
 const takenNames = {};
 const takenFaces = {};
-let idx = 999;
+let idx = 200;
 
 const records = [];
 
@@ -151,13 +151,13 @@ function createImage(idx) {
       .replace('<!-- eyes -->', getLayer(`eyes${eyes}`))
       .replace('<!-- nose -->', getLayer(`nose${nose}`))
       .replace('<!-- mouth -->', getLayer(`mouth${mouth}`))
-      .replace('<!-- beard -->', getLayer(`beard${beard}`, 0.5))
+      .replace('<!-- beard -->', getLayer(`beard${beard}`))
 
     const meta = {
       id: idx,
       name,
       description: `A drawing of ${name}`,
-      image: `${idx}.png`,
+      image: `BASE-URL/${idx}.png`,
       attributes: [
         { 
           trait_type: 'Background',
@@ -205,6 +205,6 @@ readdirSync('./out').forEach(f => rmSync(`./out/${f}`));
 do {
   createImage(idx);
   idx--;
-} while (idx >= 0);
+} while (idx > 0);
 
 writeFileSync(`./out/db.json`, JSON.stringify(records));
